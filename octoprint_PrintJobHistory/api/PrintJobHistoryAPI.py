@@ -715,9 +715,14 @@ class PrintJobHistoryAPI(octoprint.plugin.BlueprintPlugin):
 
 		conn.close()
 
-		return Response(CSVExportImporter.transform2CSV(allJobsModels),
-						mimetype='text/csv',
-						headers={'Content-Disposition': 'attachment; filename=PrintHistory.csv'})
+	 	csv = []
+            	for csvline in CSVExportImporter.transform2CSV(allSpoolModels):
+                	csv.append(csvline)
+
+            	return Response(csv,
+	                        mimetype='text/csv',
+	                        headers={'Content-Disposition': 'attachment; filename=PrintHistory.csv'})
+
 
 	###################################################################################### PRINTJOB - REPORT
 	@octoprint.plugin.BlueprintPlugin.route("/singlePrintJobReport/<databaseId>", methods=["GET"])
