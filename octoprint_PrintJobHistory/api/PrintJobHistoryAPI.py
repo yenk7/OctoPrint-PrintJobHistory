@@ -510,9 +510,13 @@ class PrintJobHistoryAPI(octoprint.plugin.BlueprintPlugin):
 			else:
 				allJobsModels = self._databaseManager.loadAllPrintJobs()
 
-			return Response(CSVExportImporter.transform2CSV(allJobsModels),
-							mimetype='text/csv',
-							headers={'Content-Disposition': 'attachment; filename=OctoprintPrintJobHistory.csv'}) # TODO add timestamp
+			csv = []
+            		for csvline in CSVExportImporter.transform2CSV(allSpoolModels):
+                		csv.append(csvline)
+
+            		return Response(csv,
+	                       		mimetype='text/csv',
+	                       		headers={'Content-Disposition': 'attachment; filename=PrintHistory.csv'})
 
 		else:
 			if (exportType == "legacyPrintHistory"):
